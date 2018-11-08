@@ -6,7 +6,6 @@ defmodule Skitcher.Subtitles.SubDB.Client do
   @base_url "http://sandbox.thesubdb.com/?action=download&hash="
 
   def download(file_path) do
-    IO.puts("HI!")
     hash = Skitcher.Subtitles.SubDB.Hash.generate(file_path)
     download_subtitle(file_path, hash)
   end
