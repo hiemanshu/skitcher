@@ -2,8 +2,8 @@ defmodule Skitcher.Subtitles.Subtitle do
   @moduledoc """
     Subtitle model
   """
-  defstruct [:start_time, :end_time, :text
-]
+  defstruct [:start_time, :end_time, :text]
+  
   def make(subtitle) do
     if subtitle do
       %Skitcher.Subtitles.Subtitle{
