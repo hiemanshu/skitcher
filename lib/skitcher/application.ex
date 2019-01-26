@@ -5,6 +5,7 @@ defmodule Skitcher.Application do
 
   def start(_type, _args) do
     children = [
+      {Skitcher.Repo, []}
     ]
 
     opts = [strategy: :one_for_one, name: Skitcher.Supervisor]

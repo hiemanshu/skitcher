@@ -6,19 +6,9 @@ defmodule Skitcher.Subtitles.Manager do
   alias Skitcher.Subtitles.Parser
 
   def download_and_import(videos_directory) do
-    download_subtitles(videos_directory)
-    import_subtitles(videos_directory)
-  end
-
-  defp download_subtitles(videos_directory) do
     videos_directory
     |> discover_video_files
     |> Enum.map(&download_subtitle(&1))
-  end
-
-  defp import_subtitles(videos_directory) do
-    videos_directory
-    |> discover_srt_files
     |> Enum.map(&parse_subtitle(&1))
     |> Enum.map(&import_subtitle(&1))
   end
@@ -34,17 +24,20 @@ defmodule Skitcher.Subtitles.Manager do
   # TODO: Make pipe do Enum
   defp download_subtitle(video_file) do
     SubDB.Client.download(video_file)
+    video_file
   end
 
-  defp discover_srt_files(videos_directory) do
-    Path.wildcard("#{videos_directory}/**/*.srt")
+  defp parse_subtitle(video_file) do
+    srt_file = video_file <> ".srt"
+    %{video_file: video_file, subtitle_data: Parser.parse(File.read!(srt_file))}
   end
 
-  defp parse_subtitle(srt_file) do
-    Parser.parse(File.read!(srt_file))
-  end
-
-  defp import_subtitle(subtitle_data) do
-    IO.inspect(subtitle_data)
+  defp import_subtitle(%{video_file: file_path, subtitle_data: subtitle_data}) do
+    subtitle = %Skitcher.Subtitles.Subtitle{file_path: file_path}
+    Enum.map(subtitle_data, fn parsed_subtitle -> 
+      if parsed_subtitle do
+        Skitcher.Repo.insert(Skitcher.Subtitles.Subtitle.changeset(subtitle, parsed_subtitle))
+      end
+    end)
   end
 end
