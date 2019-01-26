@@ -4,6 +4,7 @@ defmodule Skitcher.Subtitles.Manager do
   """
   alias Skitcher.Subtitles.SubDB
   alias Skitcher.Subtitles.Parser
+  alias Skitcher.Subtitles.Subtitle
 
   def download_and_import(videos_directory) do
     videos_directory
@@ -32,10 +33,10 @@ defmodule Skitcher.Subtitles.Manager do
   end
 
   defp import_subtitle(%{video_file: file_path, subtitle_data: subtitle_data}) do
-    subtitle = %Skitcher.Subtitles.Subtitle{file_path: file_path}
+    subtitle = %Subtitle{file_path: file_path}
     Enum.map(subtitle_data, fn parsed_subtitle -> 
       if parsed_subtitle do
-        Skitcher.Repo.insert(Skitcher.Subtitles.Subtitle.changeset(subtitle, parsed_subtitle))
+        Skitcher.Repo.insert(Subtitle.changeset(subtitle, parsed_subtitle))
       end
     end)
   end
