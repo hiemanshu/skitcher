@@ -7,15 +7,15 @@ defmodule Skitcher.Subtitles.SubDB.Client do
 
   def download(file_path) do
     hash = Skitcher.Subtitles.SubDB.Hash.generate(file_path)
-    download_subtitle(file_path, hash)
+    download_subtitle(hash)
   end
 
-  defp download_subtitle(file_path, hash) do
+  defp download_subtitle(hash) do
     url = @base_url <> hash <> "&language=en"
 
     case HTTPoison.get(url, [{"User-Agent", @user_agent}]) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        save_file(file_path, body)
+        body
 
       {:ok, %HTTPoison.Response{status_code: 404}} ->
         "Not found :("
@@ -23,10 +23,5 @@ defmodule Skitcher.Subtitles.SubDB.Client do
       {:error, %HTTPoison.Error{reason: reason}} ->
         reason
     end
-  end
-
-  defp save_file(file_path, body) do
-    srt_file_path = file_path <> ".srt"
-    File.write(srt_file_path, body)
   end
 end

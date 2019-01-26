@@ -23,8 +23,7 @@ defmodule Skitcher.Subtitles.Manager do
 
   # TODO: Make pipe do Enum
   defp download_subtitle(video_file) do
-    SubDB.Client.download(video_file)
-    video_file
+    save_subtitle(video_file, SubDB.Client.download(video_file))
   end
 
   defp parse_subtitle(video_file) do
@@ -39,5 +38,11 @@ defmodule Skitcher.Subtitles.Manager do
         Skitcher.Repo.insert(Skitcher.Subtitles.Subtitle.changeset(subtitle, parsed_subtitle))
       end
     end)
+  end
+
+  defp save_subtitle(video_file, body) do
+    srt_file_path = video_file <> ".srt"
+    File.write(srt_file_path, body)
+    video_file
   end
 end
