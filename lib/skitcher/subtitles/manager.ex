@@ -5,13 +5,18 @@ defmodule Skitcher.Subtitles.Manager do
   alias Skitcher.Subtitles.SubDB
   alias Skitcher.Subtitles.Parser
 
-  def download(videos_directory) do
+  def download_and_import(videos_directory) do
+    download_subtitles(videos_directory)
+    import_subtitles(videos_directory)
+  end
+
+  defp download_subtitles(videos_directory) do
     videos_directory
     |> discover_video_files
     |> Enum.map(&download_subtitle(&1))
   end
 
-  def import(videos_directory) do
+  defp import_subtitles(videos_directory) do
     videos_directory
     |> discover_srt_files
     |> Enum.map(&parse_subtitle(&1))
@@ -36,10 +41,10 @@ defmodule Skitcher.Subtitles.Manager do
   end
 
   defp parse_subtitle(srt_file) do
-    subtitles = Parser.parse(File.read!(srt_file))
+    Parser.parse(File.read!(srt_file))
   end
 
   defp import_subtitle(subtitle_data) do
-    
+    IO.inspect(subtitle_data)
   end
 end
