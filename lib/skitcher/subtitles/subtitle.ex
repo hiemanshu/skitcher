@@ -6,8 +6,8 @@ defmodule Skitcher.Subtitles.Subtitle do
   import Ecto.Query
 
   schema "subtitles" do
-    field :start_time, :time
-    field :end_time, :time
+    field :start_time, :time_usec
+    field :end_time, :time_usec
     field :text, :string
     field :file_path, :string
   end

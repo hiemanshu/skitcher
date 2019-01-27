@@ -4,8 +4,8 @@ defmodule Skitcher.Repo.Migrations.CreateSubtitles do
   def change do
     execute "CREATE extension if not exists pg_trgm;"
     create table(:subtitles) do
-      add :start_time, :time, null: false
-      add :end_time, :time, null: false
+      add :start_time, :time_usec, null: false
+      add :end_time, :time_usec, null: false
       add :text, :text, null: false
       add :file_path, :text, null: false
     end
