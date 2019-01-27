@@ -22,7 +22,6 @@ defmodule Skitcher.Subtitles.Manager do
     end)
   end
 
-  # TODO: Make pipe do Enum
   defp download_subtitle(video_file) do
     save_subtitle(video_file, SubDB.Client.download(video_file))
   end

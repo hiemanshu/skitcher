@@ -3,6 +3,7 @@ defmodule Skitcher.Subtitles.Subtitle do
     Subtitle model
   """
   use Ecto.Schema
+  import Ecto.Query
 
   schema "subtitles" do
     field :start_time, :time
@@ -15,5 +16,11 @@ defmodule Skitcher.Subtitles.Subtitle do
     subtitle
     |> Ecto.Changeset.cast(params, [:start_time, :end_time, :text, :file_path])
     |> Ecto.Changeset.validate_required([:start_time, :end_time, :text, :file_path])
+  end
+
+  def search(query, search_term) do
+    from(subtitle in query,
+    where: ilike(subtitle.text, ^"%#{search_term}%")
+    )
   end
 end

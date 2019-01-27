@@ -24,7 +24,8 @@ defmodule Skitcher.MixProject do
     [
       {:httpoison, "~> 1.4"},
       {:ecto_sql, "~> 3.0"},
-      {:postgrex, ">= 0.0.0"}
+      {:postgrex, ">= 0.0.0"},
+      {:ffmpex, "~> 0.5.2"}
     ]
   end
 end
